@@ -1,4 +1,4 @@
-# BankVerify SPA
+# Pay-By-Bank SPA
 
 A responsive React-based Single Page Application demonstrating **TDD**, **Clean Architecture**, and **Design Patterns**.
 
@@ -35,9 +35,9 @@ Tests are located in \`lib/__tests__/\` and cover:
 
 Run tests:
 ```bash
-npm test              # Run all tests
-npm run test:watch    # Watch mode
-npm run test:coverage # Coverage report
+pnpm test              # Run all tests
+pnpm run test:watch    # Watch mode
+pnpm run test:coverage # Coverage report
 ```
 
 ## 🐳 Docker Setup
@@ -61,25 +61,25 @@ docker-compose down
 - **Screen 1**: User registration with validation
 - **Screen 2**: Bank selection with visual feedback
 - **Screen 3**: Success confirmation
-- **API microservice** for bank verification
+- **API microservice** for bank verification and submission
 
 ## 🚀 Quick Start
 
 ```bash
 # Install dependencies
-npm install
+pnpm install
 
 # Development
-npm run dev
+pnpm run dev
 
 # Production build
-npm run build
-npm start
+pnpm run build
+pnpm start
 ```
 
 ## 📋 API Endpoints
 
-- \`GET /api/verify\` - Health check
+- \`GET /api/health\` - Health check
 - \`POST /api/verify\` - Bank verification
 
 ## 🔒 Security
@@ -87,6 +87,5 @@ npm start
 - Input validation with Value Objects
 - IBAN format validation
 - Email format validation
-- Rate limiting (via Nginx)
 - Security headers configured
 ```

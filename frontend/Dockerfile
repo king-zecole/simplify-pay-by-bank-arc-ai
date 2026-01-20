@@ -21,6 +21,11 @@ COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV NODE_ENV=production
 
+ARG NEXT_PUBLIC_INTERNAL_API_BASE_URL
+
+# Set it as an environment variable so Next.js can see it during 'build'
+ENV NEXT_PUBLIC_INTERNAL_API_BASE_URL=$NEXT_PUBLIC_INTERNAL_API_BASE_URL
+
 # Ensure pnpm is available in this stage as well
 RUN corepack enable && corepack prepare pnpm@latest --activate
 

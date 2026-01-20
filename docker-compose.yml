@@ -24,6 +24,8 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
+      args:
+        - NEXT_PUBLIC_INTERNAL_API_BASE_URL=http://localhost:${PORT}
     image: king-zecole/paybybank-app
     ports:
       - "${APP_PORT}:${APP_PORT}"
