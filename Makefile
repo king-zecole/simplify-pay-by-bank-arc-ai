@@ -17,6 +17,10 @@ lint:
 test: build
 	docker compose run --rm backend go test -shuffle=on -count=1 ./...
 
+test-app: 
+	pnpm install --prefix frontend \
+	&& pnpm --prefix frontend test
+
 clean:
 	docker compose down --remove-orphans --volumes
 
