@@ -1,0 +1,131 @@
+openapi: 3.0.3
+info:
+  title: Pay By Bank Service API
+  version: 1.0.0
+  description: API for creating bank accounts / verifications.
+servers:
+  - url: /api/v1
+paths:
+  /create-account:
+    post:
+      summary: Create a new account verification
+      operationId: CreateAccount
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateAccountRequest'
+      responses:
+        '201':
+          description: Account created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateAccountResponse'
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /health:
+    get:
+      summary: Health check endpoint
+      operationId: HealthCheck
+      responses:
+        '200':
+          description: Service is healthy
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+
+components:
+  schemas:
+    User:
+      type: object
+      required:
+        - fullName
+        - email
+        - iban
+      properties:
+        fullName:
+          type: string
+        email:
+          type: string
+          format: email
+        iban:
+          type: string
+    Bank:
+      type: object
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        code:
+          type: string
+    CreateAccountRequest:
+      type: object
+      required:
+        - user
+        - bank
+      properties:
+        user:
+          $ref: '#/components/schemas/User'
+        bank:
+          $ref: '#/components/schemas/Bank'
+    CreateAccountResponse:
+      type: object
+      required:
+        - success
+        - message
+        - timestamp
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+        accountId:
+          type: string
+        data:
+          type: object
+          additionalProperties: true
+    HealthResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        service:
+          type: string
+        version:
+          type: string
+        timestamp:
+          type: string
+    ErrorResponse:
+      type: object
+      required:
+        - success
+        - message
+        - timestamp
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
+        timestamp:
+          type: string
+          format: date-time

@@ -12,13 +12,31 @@ services:
       - .env
     ports:
       - "${PORT}:${PORT}"
+    depends_on:
+      - postgres
     healthcheck:
-      test: ["CMD", "wget", "-q", "--spider", "http://localhost:${PORT}/health"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 10s
+      test: [ "CMD", "wget", "-q", "--spider", "http://localhost:${PORT}/api/v1/health" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
     restart: unless-stopped
+    networks:
+      - pay-by-bank-network
+
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+    ports:
+      - "${DB_PORT}:${DB_PORT}"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./backend/db/migrations:/docker-entrypoint-initdb.d
+    networks:
+      - pay-by-bank-network
 
   app:
     build:
@@ -33,13 +51,18 @@ services:
       backend:
         condition: service_healthy
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:${APP_PORT}"]
+      test: [ "CMD", "curl", "-f", "http://localhost:${APP_PORT}" ]
       interval: 30s
       timeout: 10s
       retries: 3
       start_period: 40s
     restart: unless-stopped
+    networks:
+      - pay-by-bank-network
 
 networks:
-  default:
-    name: pay-by-bank-network
+  pay-by-bank-network:
+
+
+volumes:
+  postgres_data:

@@ -15,7 +15,7 @@ export class ApiBankVerificationRepository implements BankVerificationRepository
 
   async verify(user: User, bank: Bank): Promise<VerificationResult> {
     try {
-      const response = await fetch(`${this.baseUrl}/api/verify`, {
+      const response = await fetch(`${this.baseUrl}/api/v1/create-account`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
