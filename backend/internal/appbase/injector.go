@@ -12,7 +12,7 @@ import (
 )
 
 // Inject sets up the application dependencies and returns the API router
-func WithInjector(cfg *Config, db *gorm.DB, r *chi.Mux) {
+func WithInjector(_ *Config, db *gorm.DB, r *chi.Mux) {
 	// 1. Repositories
 	accountRepo := repository.NewPostgresRepository(db)
 
@@ -20,7 +20,7 @@ func WithInjector(cfg *Config, db *gorm.DB, r *chi.Mux) {
 	accountService := service.NewAccountService(accountRepo)
 
 	// 3. API Server (Generated Interface Implementation)
-	accountServer := v1.NewAccountServer(accountService)
+	accountServer := v1.NewAPI(accountService)
 
 	// 4. Register Routes
 	r.Mount("/api/v1", server.HandlerFromMux(accountServer, chi.NewRouter()))
