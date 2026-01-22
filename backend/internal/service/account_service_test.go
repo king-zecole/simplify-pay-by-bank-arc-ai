@@ -38,7 +38,7 @@ func TestVerifyUser(t *testing.T) {
 
 		assert.NoError(t, err)
 		assert.True(t, result.Success)
-		assert.Equal(t, "Bank account verified/created successfully", result.Message)
+		assert.Equal(t, "Bank account verified and created successfully", result.Message)
 		mockRepo.AssertExpectations(t)
 	})
 

@@ -36,9 +36,6 @@ func (s *AccountService) CreateAccount(ctx context.Context, req models.MandateRe
 		}, nil
 	}
 
-	// 2. Simulate processing delay
-	time.Sleep(100 * time.Millisecond)
-
 	// 3. Generate Result
 	mandateID := utils.GenerateVerificationID()
 	mandate := &models.Mandate{
@@ -46,7 +43,7 @@ func (s *AccountService) CreateAccount(ctx context.Context, req models.MandateRe
 		User:      req.User,
 		Bank:      req.Bank,
 		Success:   true,
-		Message:   "Bank account verified/created successfully",
+		Message:   "Bank account verified and created successfully",
 		Timestamp: time.Now().UTC(),
 	}
 

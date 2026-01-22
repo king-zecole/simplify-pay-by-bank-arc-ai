@@ -12,10 +12,10 @@ run-all: build \
 	server
 
 lint:
-	golangci-lint run -v --fix
+	docker compose run --rm backend golangci-lint run -v --fix
 
 test: build
-	go test -shuffle=on -count=1 ./backend/...
+	docker compose run --rm backend go test -shuffle=on -count=1 ./...
 
 clean:
 	docker compose down --remove-orphans --volumes

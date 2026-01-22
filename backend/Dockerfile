@@ -23,10 +23,11 @@ FROM golang:1.23-alpine
 
 WORKDIR /app
 
-# Install ca-certificates, netcat, postgresql-client, curl and migrate
+# Install ca-certificates, netcat, postgresql-client, curl, migrate and golangci-lint
 RUN apk --no-cache add ca-certificates netcat-openbsd postgresql-client curl \
     && curl -L https://github.com/golang-migrate/migrate/releases/download/v4.17.0/migrate.linux-amd64.tar.gz | tar xvz \
-    && mv migrate /usr/local/bin/migrate
+    && mv migrate /usr/local/bin/migrate \
+    && curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.61.0
 
 # Copy binary from builder
 COPY --from=builder /app/main /usr/local/bin/app-server
