@@ -11,7 +11,7 @@ formatters:
   settings:
     goimports:
       local-prefixes:
-        - kingzecole/pay-by-bank
+        - kingzecole/pay-by-bank-service
 
     golines:
       max-len: 120

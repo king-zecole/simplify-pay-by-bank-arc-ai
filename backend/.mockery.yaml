@@ -1,0 +1,6 @@
+with-expecter: true
+dir: internal/repository/mocks
+packages:
+  kingzecole/pay-by-bank-service/internal/repository:
+    config:
+      all: true

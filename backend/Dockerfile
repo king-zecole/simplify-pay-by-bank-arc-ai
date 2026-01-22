@@ -1,34 +1,44 @@
-# Go Backend Dockerfile
-# Multi-stage build for minimal image size
-
-FROM golang:1.21-alpine AS builder
+# Build Stage
+FROM golang:1.23-alpine AS builder
 
 WORKDIR /app
 
-# Copy go mod files
-COPY go.mod ./
+# Install build dependencies
+RUN apk add --no-cache git
 
-# Download dependencies (none for this simple service)
+# Copy go mod and sum files
+COPY go.mod go.sum ./
+
+# Download dependencies
 RUN go mod download
 
 # Copy source code
 COPY . .
 
-# Build the binary
-RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main .
+# Build the application
+RUN CGO_ENABLED=0 GOOS=linux go build -o main ./cmd/server
 
-# Final stage - minimal image
-FROM alpine:latest
+# Run Stage
+FROM golang:1.23-alpine
 
-RUN apk --no-cache add ca-certificates
+WORKDIR /app
 
-WORKDIR /root/
+# Install ca-certificates, netcat, postgresql-client, curl and migrate
+RUN apk --no-cache add ca-certificates netcat-openbsd postgresql-client curl \
+    && curl -L https://github.com/golang-migrate/migrate/releases/download/v4.17.0/migrate.linux-amd64.tar.gz | tar xvz \
+    && mv migrate /usr/local/bin/migrate
 
 # Copy binary from builder
-COPY --from=builder /app/main .
+COPY --from=builder /app/main /usr/local/bin/app-server
+
+# Copy migrations and scripts
+COPY db/migrations ./db/migrations
+COPY db/scripts ./db/scripts
+COPY scripts ./scripts
+COPY . .
 
 # Expose port
 EXPOSE 8080
 
-# Run the binary
-CMD ["./main"]
+# Command to run
+CMD ["app-server"]
